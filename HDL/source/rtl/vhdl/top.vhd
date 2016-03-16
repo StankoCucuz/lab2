@@ -269,6 +269,9 @@ begin
   --dir_green
   --dir_blue
  
+ 
+ 
+ 
   -- koristeci signale realizovati logiku koja pise po TXT_MEM
   --char_address
   --char_value
