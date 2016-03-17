@@ -246,6 +246,21 @@ begin
     blue_o             => blue_o     
   );
   
+
+	next_text_addr<=current_text_addr+1 when current_text_addr<1200-1
+			else conv_std_logic_vector(0, MEM_ADDR_WIDTH);
+			
+	txt_reg: reg
+		generic map(
+			WIDTH => MEM_ADDR_WIDTH,
+			RST_INIT =>0
+		)
+		port map(
+		i_clk  =>pix_clock_s,
+		in_rst =>vga_rst_n_s,
+		i_d    =>next_text_addr,
+		o_q    =>current_text_addr
+	);
   
   dir_red 		<= x"FF" when dir_pixel_column <= 2 * (H_RES / 8) else
 					   x"00" when dir_pixel_column < 4 * (H_RES / 8) else
@@ -276,6 +291,16 @@ begin
   --char_address
   --char_value
   --char_we
+
+	char_we<='1';
+  	char_address<=current_text_addr;
+
+  char_value<= x"14" when char_address=conv_std_logic_vector(1, MEM_ADDR_WIDTH) else
+					x"5" when char_address=conv_std_logic_vector(2, MEM_ADDR_WIDTH) else
+					x"18" when char_address=conv_std_logic_vector(3, MEM_ADDR_WIDTH) else
+					x"14" when char_address=conv_std_logic_vector(1, MEM_ADDR_WIDTH) else
+					x"2E" when char_address=conv_std_logic_vector(1, MEM_ADDR_WIDTH) else
+					x"20";
   
   -- koristeci signale realizovati logiku koja pise po GRAPH_MEM
   --pixel_address
